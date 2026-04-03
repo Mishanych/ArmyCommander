@@ -210,6 +210,7 @@ GameObject:
   - component: {fileID: 420097421}
   - component: {fileID: 420097420}
   - component: {fileID: 420097423}
+  - component: {fileID: 420097424}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -335,6 +336,20 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &420097424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420097419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daef517863264e07b47aba78ccff4501, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Camera.CameraFollower
+  _offset: {x: 0, y: 15, z: -10}
+  _smoothTime: 0.25
 --- !u!1 &513409356
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,6 +704,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.GameInstaller
   _joystick: {fileID: 5178763782790282664}
+  _player: {fileID: 1714038771}
+  _cameraFollower: {fileID: 420097424}
 --- !u!1 &1714038770
 GameObject:
   m_ObjectHideFlags: 0
