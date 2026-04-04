@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace ArmyCommander.Player
+namespace ArmyCommander.Modules.Player
 {
     public class PlayerMovement : MonoBehaviour
     {

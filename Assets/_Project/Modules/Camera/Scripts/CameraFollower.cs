@@ -1,8 +1,8 @@
-﻿using ArmyCommander.Player;
+﻿using ArmyCommander.Modules.Player;
 using UnityEngine;
 using Zenject;
 
-namespace ArmyCommander.Camera
+namespace ArmyCommander.Modules.Camera
 {
     public class CameraFollower : MonoBehaviour
     {
