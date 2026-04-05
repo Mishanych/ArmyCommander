@@ -21,8 +21,8 @@ namespace ArmyCommander.Modules.Economy
         {
             return type switch
             {
-                CurrencyType.Gold => _goldPool.Spawn(position, rotation),
-                CurrencyType.Silver => _silverPool.Spawn(position, rotation),
+                CurrencyType.Gold => _goldPool.Spawn(position, rotation, _goldPool),
+                CurrencyType.Silver => _silverPool.Spawn(position, rotation, _silverPool),
                 _ => throw new System.ArgumentOutOfRangeException()
             };
         }

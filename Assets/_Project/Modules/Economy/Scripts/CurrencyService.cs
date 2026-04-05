@@ -17,6 +17,14 @@ namespace ArmyCommander.Modules.Economy
             _currencies[type] += amount;
             OnChanged?.Invoke(type, _currencies[type]);
         }
+        
+        public void Subtract(CurrencyType type, int amount)
+        {
+            if (!HasEnough(type, amount)) return;
+            
+            _currencies[type] -= amount;
+            OnChanged?.Invoke(type, _currencies[type]);
+        }
 
         public int GetAmount(CurrencyType type)
         {

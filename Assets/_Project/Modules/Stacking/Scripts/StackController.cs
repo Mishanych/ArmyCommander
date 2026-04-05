@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ArmyCommander.Core;
 using ArmyCommander.Modules.Economy;
 using ArmyCommander.Modules.Stacking;
 using UnityEngine;
@@ -23,6 +24,23 @@ namespace ArmyCommander.Modules.Stacking
             NotifyItemsPositionsChanged();
 
             return GetPosition(index);
+        }
+
+        public bool TryPopItem(CurrencyType type, out IStackable item)
+        {
+            int index = _items.FindLastIndex(i => i.Type == type);
+            
+            if (index != -1)
+            {
+                item = _items[index];
+                _items.RemoveAt(index);
+        
+                NotifyItemsPositionsChanged();
+                return true;
+            }
+
+            item = null;
+            return false;
         }
 
         private void NotifyItemsPositionsChanged()

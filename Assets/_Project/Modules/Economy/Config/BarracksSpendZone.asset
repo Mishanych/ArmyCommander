@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04255c6c949b4d8594b7bea5e46fde7e, type: 3}
+  m_Name: BarracksSpendZone
+  m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Economy.SpendZoneConfig
+  RequiredType: 0
+  TotalCost: 10
+  BuildingName: Barracks
+  ConsumptionRate: 0.1
