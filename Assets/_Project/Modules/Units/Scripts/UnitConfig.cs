@@ -20,7 +20,6 @@ namespace ArmyCommander.Modules.Units.Scripts
         public float AttackRange = 2f;
         public float AttackCooldown = 1.5f;
 
-        [Header("Faction")]
-        public FactionType Faction;
+        public FactionType FactionType;
     }
 }

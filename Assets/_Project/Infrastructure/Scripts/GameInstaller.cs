@@ -11,8 +11,8 @@ namespace ArmyCommander.Infrastructure
 {
     public class GameInstaller : MonoInstaller
     {
-        private const string MoneyPoolName = "MoneyPool";
-        private const string PlayerId = "Player";
+        public const string PlayerId = "Player";
+        public const string EnemyId = "Enemy";
         
         [SerializeField] private JoystickInputService _joystick;
         [SerializeField] private PlayerMovement _player;
@@ -21,7 +21,8 @@ namespace ArmyCommander.Infrastructure
         [Header("Prefabs")]
         [SerializeField] private GameObject _silverMoneyTagPrefab;
         [SerializeField] private GameObject _goldMoneyTagPrefab;
-        [SerializeField] private GameObject _unitPrefab;
+        [SerializeField] private GameObject _playerPrefab;
+        [SerializeField] private GameObject _enemyPrefab;
 
         public override void InstallBindings()
         {
@@ -55,16 +56,21 @@ namespace ArmyCommander.Infrastructure
         
         private void InstallUnits()
         {
-            Container.Bind<IUnitManager>()
-                .WithId(PlayerId)
-                .To<UnitManager>()
+            Container.BindInterfacesAndSelfTo<UnitManager>()
                 .AsSingle()
-                .WithArguments(15);
+                .WithArguments(20);
 
             Container.BindMemoryPool<Unit, Unit.Pool>()
+                .WithId(PlayerId) 
                 .WithInitialSize(15)
-                .FromComponentInNewPrefab(_unitPrefab)
-                .UnderTransformGroup("Pool_Units");
+                .FromComponentInNewPrefab(_playerPrefab)
+                .UnderTransformGroup("Pool_PlayerUnits");
+
+            Container.BindMemoryPool<Unit, Unit.Pool>()
+                .WithId(EnemyId) 
+                .WithInitialSize(20)
+                .FromComponentInNewPrefab(_enemyPrefab)
+                .UnderTransformGroup("Pool_EnemyUnits");
         }
     }
 }

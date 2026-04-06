@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using ArmyCommander.Core;
+using ArmyCommander.Infrastructure;
 using ArmyCommander.Modules.Units;
 using ArmyCommander.Modules.Units.Scripts;
 using Cysharp.Threading.Tasks;
@@ -14,7 +16,7 @@ namespace ArmyCommander.Modules.Building
         [SerializeField] private UnitConfig _unitToSpawn;
         [SerializeField] private string _managerId = "Player";
 
-        [Inject] private Unit.Pool _unitPool;
+        [Inject(Id = GameInstaller.EnemyId)]  private Unit.Pool _unitPool;
         [Inject] private DiContainer _container;
         
         private IUnitManager _unitManager;
@@ -57,8 +59,8 @@ namespace ArmyCommander.Modules.Building
 
                     if (_unitManager.CanSpawn)
                     {
-                        Unit unit = _unitPool.Spawn(_unitToSpawn, transform.position);
-                        _unitManager.RegisterUnit(unit);
+                        Unit unit = _unitPool.Spawn(_unitToSpawn, transform.position, _unitPool);
+                        _unitManager.RegisterUnit(unit, FactionType.Player);
                     }
                 }
             }
