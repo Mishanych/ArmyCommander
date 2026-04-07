@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 014adfddfe9049c7a6b91a95e6ee2904, type: 3}
   m_Name: Enemy_Soldier
   m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Units.Scripts.UnitConfig
-  Prefab: {fileID: 5368826859383930267, guid: 7675d3101f178214fb0bd2436da3edd9, type: 3}
+  Prefab: {fileID: 272576383735059129, guid: 7675d3101f178214fb0bd2436da3edd9, type: 3}
   UnitName: Enemy_Soldier
   MoveSpeed: 3
   StoppingDistance: 1.5

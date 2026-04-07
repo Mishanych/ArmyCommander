@@ -7,7 +7,7 @@ namespace ArmyCommander.Modules.Units.Scripts
     public class UnitConfig : ScriptableObject
     {
         [Header("Visuals")]
-        public GameObject Prefab;
+        public Unit Prefab;
         public string UnitName;
 
         [Header("Movement")]

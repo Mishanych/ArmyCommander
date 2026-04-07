@@ -1055,7 +1055,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a8286d7ca0b405c82b5dad3cbe7722f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Units.EnemyGroup
-  _enemyType: {fileID: 11400000, guid: 4a281049c3f12a44e962b6c7b38a2d4c, type: 2}
+  _config: {fileID: 11400000, guid: 4a281049c3f12a44e962b6c7b38a2d4c, type: 2}
   _count: 10
   _radius: 3
 --- !u!4 &653035847

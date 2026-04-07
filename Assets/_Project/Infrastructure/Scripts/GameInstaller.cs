@@ -60,17 +60,7 @@ namespace ArmyCommander.Infrastructure
                 .AsSingle()
                 .WithArguments(20);
 
-            Container.BindMemoryPool<Unit, Unit.Pool>()
-                .WithId(PlayerId) 
-                .WithInitialSize(15)
-                .FromComponentInNewPrefab(_playerPrefab)
-                .UnderTransformGroup("Pool_PlayerUnits");
-
-            Container.BindMemoryPool<Unit, Unit.Pool>()
-                .WithId(EnemyId) 
-                .WithInitialSize(20)
-                .FromComponentInNewPrefab(_enemyPrefab)
-                .UnderTransformGroup("Pool_EnemyUnits");
+            Container.Bind<UnitFactory>().AsSingle();
         }
     }
 }

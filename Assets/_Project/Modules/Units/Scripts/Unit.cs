@@ -8,26 +8,25 @@ using Zenject;
 
 namespace ArmyCommander.Modules.Units
 {
-    public class Unit : MonoBehaviour, IDamageable, IPoolable<UnitConfig, Vector3, IMemoryPool>
+    public class Unit : MonoBehaviour, IDamageable, IPoolable<UnitConfig, Vector3>
     {
         [SerializeField] private NavMeshAgent _agent;
 
         [Inject] private UnitManager _unitManager;
+        [Inject] private UnitFactory _unitFactory;
         
         public float Health => _currentHealth;
         public bool IsDead => _currentHealth <= 0;
         
-        private IMemoryPool _pool;
         private UnitConfig _config;
         private bool _isDead;
         private float _currentHealth;
         private float _maxHealth;
 
-        public void OnSpawned(UnitConfig config, Vector3 position, IMemoryPool pool)
+        public void OnSpawned(UnitConfig config, Vector3 position)
         {
             _config = config;
             transform.position = position;
-            _pool = pool;
             
             _currentHealth = _config.MaxHealth;
             _maxHealth = _config.MaxHealth;
@@ -67,26 +66,23 @@ namespace ArmyCommander.Modules.Units
         
         private void Die()
         {
-            // 1. Зупиняємо логіку
             _agent.isStopped = true;
             _agent.enabled = false;
 
             // 2. Анімація (перевір назву тригера в аніматорі!)
             //_animator.SetTrigger("Die"); 
 
-            // 3. Прибираємо з реєстру менеджера
             _unitManager.UnregisterUnit(this, _config.FactionType);
-
-            // 4. Повертаємо в пул після паузи (щоб дограла анімація)
             DespawnWithDelay().Forget();
         }
 
         private async UniTaskVoid DespawnWithDelay()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(3f)); // 3 секунди на анімацію смерті
-            _pool.Despawn(this);
+            await UniTask.Delay(TimeSpan.FromSeconds(3f));
+    
+            _unitFactory?.Despawn(this, _config.Prefab);
         }
 
-        public class Pool : PoolableMemoryPool<UnitConfig, Vector3, IMemoryPool, Unit> { }
+        public class Pool : PoolableMemoryPool<UnitConfig, Vector3, Unit> { }
     }
 }

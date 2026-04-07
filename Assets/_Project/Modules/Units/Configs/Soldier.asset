@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 014adfddfe9049c7a6b91a95e6ee2904, type: 3}
   m_Name: Soldier
   m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Units.Scripts.UnitConfig
-  Prefab: {fileID: 5368826859383930267, guid: adbbfc7f120b4ee41a1b1a9e4540e52e, type: 3}
+  Prefab: {fileID: 272576383735059129, guid: adbbfc7f120b4ee41a1b1a9e4540e52e, type: 3}
   UnitName: Soldier
   MoveSpeed: 4
   StoppingDistance: 1.5
@@ -20,4 +20,4 @@ MonoBehaviour:
   Damage: 10
   AttackRange: 2
   AttackCooldown: 1.5
-  Faction: 0
+  FactionType: 0

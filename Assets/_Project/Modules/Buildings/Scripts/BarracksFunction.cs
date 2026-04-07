@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using ArmyCommander.Core;
-using ArmyCommander.Infrastructure;
 using ArmyCommander.Modules.Units;
 using ArmyCommander.Modules.Units.Scripts;
 using Cysharp.Threading.Tasks;
@@ -14,18 +13,13 @@ namespace ArmyCommander.Modules.Building
     {
         [SerializeField] private BarracksConfig _config;
         [SerializeField] private UnitConfig _unitToSpawn;
-        [SerializeField] private string _managerId = "Player";
-
-        [Inject(Id = GameInstaller.EnemyId)]  private Unit.Pool _unitPool;
-        [Inject] private DiContainer _container;
         
-        private IUnitManager _unitManager;
+        [Inject] private IUnitManager _unitManager;
+        [Inject] private UnitFactory _unitFactory;
         private CancellationTokenSource _cts;
 
         public void Initialize()
         {
-            _unitManager = _container.ResolveId<IUnitManager>(_managerId);
-
             StopSpawning();
             _cts = new CancellationTokenSource();
     
@@ -59,7 +53,7 @@ namespace ArmyCommander.Modules.Building
 
                     if (_unitManager.CanSpawn)
                     {
-                        Unit unit = _unitPool.Spawn(_unitToSpawn, transform.position, _unitPool);
+                        Unit unit = _unitFactory.Create(_unitToSpawn, transform.position);
                         _unitManager.RegisterUnit(unit, FactionType.Player);
                     }
                 }
