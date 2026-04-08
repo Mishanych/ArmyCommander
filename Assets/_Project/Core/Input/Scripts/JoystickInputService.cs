@@ -1,5 +1,4 @@
-﻿using System;
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,20 +6,22 @@ namespace ArmyCommander.Input
 {
     public class JoystickInputService : MonoBehaviour, IInputService, IDragHandler, IPointerDownHandler, IPointerUpHandler
     {
+        private const float VisibleAlpha = 1f;
+        private const float HiddenAlpha = 0f;
+        private const float FadeDuration = 0.15f;
+        
         [SerializeField] private RectTransform _visuals;
         [SerializeField] private RectTransform _background;
         [SerializeField] private RectTransform _handle;
         [SerializeField] private CanvasGroup _canvasGroup;
-
-        private float _range = 100f;
-        [SerializeField] private float _fadeDuration = 0.15f; // Швидкість появи
-        [SerializeField] private float _appearScale = 1.2f;
         
         public Vector2 Axis { get; private set; }
+        
+        private float _range = 100f;
 
         private void Start()
         {
-            _canvasGroup.alpha = 0;
+            _canvasGroup.alpha = HiddenAlpha;
             _visuals.localScale = Vector3.zero;
         }
 
@@ -53,10 +54,10 @@ namespace ArmyCommander.Input
             _canvasGroup.DOKill();
             _visuals.DOKill();
 
-            _canvasGroup.DOFade(1f, _fadeDuration).SetEase(Ease.OutCubic);
+            _canvasGroup.DOFade(VisibleAlpha, FadeDuration).SetEase(Ease.OutCubic);
         
             _visuals.localScale = Vector3.zero;
-            _visuals.DOScale(1f, _fadeDuration).SetEase(Ease.OutBack); 
+            _visuals.DOScale(VisibleAlpha, FadeDuration).SetEase(Ease.OutBack); 
         }
         
         private void HideJoystick()
@@ -64,8 +65,8 @@ namespace ArmyCommander.Input
             _canvasGroup.DOKill();
             _visuals.DOKill();
 
-            _canvasGroup.DOFade(0f, _fadeDuration).SetEase(Ease.InCubic);
-            _visuals.DOScale(0f, _fadeDuration).SetEase(Ease.InQuad);
+            _canvasGroup.DOFade(HiddenAlpha, FadeDuration).SetEase(Ease.InCubic);
+            _visuals.DOScale(HiddenAlpha, FadeDuration).SetEase(Ease.InQuad);
         }
     }
 }

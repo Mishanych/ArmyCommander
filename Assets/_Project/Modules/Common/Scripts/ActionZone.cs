@@ -1,14 +1,15 @@
-﻿using ArmyCommander.Modules.Common;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
-using Zenject;
 
-namespace ArmyCommander.Modules.Units
+namespace ArmyCommander.Modules.Common
 {
     public class ActionZone : BaseZone
     {
+        [SerializeField] private bool _oneTimeAction = false;
         [SerializeField] private Button _actionButton;
-        [Inject] private IUnitManager _unitManager;
+
+        public UnityEvent OnActionExecuted { get; set; } = new();
 
         private void Start()
         {
@@ -28,8 +29,12 @@ namespace ArmyCommander.Modules.Units
 
         private void HandleClick()
         {
-            _unitManager.SetAttackState(true);
-            _actionButton.gameObject.SetActive(false);
+            OnActionExecuted?.Invoke();
+
+            if (_oneTimeAction)
+            {
+                _actionButton.gameObject.SetActive(false);
+            }
         }
     }
 }

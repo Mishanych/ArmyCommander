@@ -11,9 +11,6 @@ namespace ArmyCommander.Infrastructure
 {
     public class GameInstaller : MonoInstaller
     {
-        public const string PlayerId = "Player";
-        public const string EnemyId = "Enemy";
-        
         [SerializeField] private JoystickInputService _joystick;
         [SerializeField] private PlayerMovement _player;
         [SerializeField] private CameraFollower _cameraFollower;
@@ -21,8 +18,6 @@ namespace ArmyCommander.Infrastructure
         [Header("Prefabs")]
         [SerializeField] private GameObject _silverMoneyTagPrefab;
         [SerializeField] private GameObject _goldMoneyTagPrefab;
-        [SerializeField] private GameObject _playerPrefab;
-        [SerializeField] private GameObject _enemyPrefab;
 
         public override void InstallBindings()
         {
@@ -61,6 +56,7 @@ namespace ArmyCommander.Infrastructure
                 .WithArguments(20);
 
             Container.Bind<UnitFactory>().AsSingle();
+            Container.Bind<ProjectileFactory>().AsSingle();
         }
     }
 }

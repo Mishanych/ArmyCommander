@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: Soldier
   m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Units.Scripts.UnitConfig
   Prefab: {fileID: 272576383735059129, guid: adbbfc7f120b4ee41a1b1a9e4540e52e, type: 3}
+  ProjectilePrefab: {fileID: 4796203570996032279, guid: 77cfc2e3dddd2f748bcb99c8a11ea569, type: 3}
   UnitName: Soldier
+  IsStationary: 0
   MoveSpeed: 4
   StoppingDistance: 1.5
   MaxHealth: 100
+  AttackType: 1
   Damage: 10
   AttackRange: 2
   AttackCooldown: 1.5
+  DropType: 0
+  DropAmount: 1
   FactionType: 0

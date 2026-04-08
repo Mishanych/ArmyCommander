@@ -6,7 +6,6 @@ namespace ArmyCommander.Modules.Camera
 {
     public class CameraFollower : MonoBehaviour
     {
-        [Header("Settings")]
         [SerializeField] private Vector3 _offset = new Vector3(0, 15, -10);
         [SerializeField] private float _smoothTime = 0.25f;
 

@@ -7,7 +7,7 @@ namespace ArmyCommander.Modules.Player
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] private float _speed = 5f;
-        private float _rotationSpeed = 10f;
+        [SerializeField] private float _rotationSpeed = 10f;
         
         private IInputService _inputService;
         

@@ -11,6 +11,7 @@ namespace ArmyCommander.Modules.Player
         [SerializeField] private StackController _stackController;
         
         [Inject] public CurrencyService CurrencyService;
+        
         public StackController StackController => _stackController;
         
         private void OnTriggerEnter(Collider other)

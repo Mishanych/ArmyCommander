@@ -10,7 +10,7 @@ namespace ArmyCommander.Modules.Economy
         [SerializeField] private SpendingZone _spendZone;
         [SerializeField] private TextMeshProUGUI _costText;
         [SerializeField] private Image _iconImage;
-        [SerializeField] private Image _progressBar; // Якщо захочеш додати смужку прогресу
+        [SerializeField] private Image _progressBar;
 
         private void Start()
         {

@@ -9,7 +9,7 @@ namespace ArmyCommander.Modules.Economy
         public CurrencyType RequiredType;
         public int TotalCost = 100;
         
-        public string BuildingName = "Barracks";
+        public string BuildingName;
         public float ConsumptionRate = 0.1f;
     }
 }

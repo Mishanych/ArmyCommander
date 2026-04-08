@@ -1,10 +1,11 @@
-﻿using ArmyCommander.Modules.Player;
+﻿using ArmyCommander.Modules.Common;
+using ArmyCommander.Modules.Player;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace ArmyCommander.Modules.Economy
 {
-    public class SpendingZone : MonoBehaviour
+    public class SpendingZone : BaseZone
     {
         [SerializeField] private SpendingZoneConfig _config;
         
@@ -14,7 +15,6 @@ namespace ArmyCommander.Modules.Economy
         public SpendingZoneConfig Config => _config;
         
         private int _remainingCost;
-        private bool _isPlayerInZone;
         private float _timer;
         private PlayerCollector _targetPlayer;
 
@@ -26,21 +26,20 @@ namespace ArmyCommander.Modules.Economy
                 OnCostChanged?.Invoke(_config.TotalCost - _remainingCost, _config.TotalCost);
             }
         }
-        
-        private void OnTriggerEnter(Collider other)
+
+        protected override void OnPlayerEntered(Collider player)
         {
-            if (other.TryGetComponent(out PlayerCollector collector))
-            {
-                _targetPlayer = collector;
-                _isPlayerInZone = true;
-            }
+            _targetPlayer = player.GetComponent<PlayerCollector>();
         }
-        
-        private void OnTriggerExit(Collider other) => _isPlayerInZone = false;
-        
+
+        protected override void OnPlayerExited(Collider player)
+        {
+            _targetPlayer = null;
+        }
+
         private void Update()
         {
-            if (!_isPlayerInZone || _remainingCost <= 0) return;
+            if (!IsPlayerInside || _remainingCost <= 0) return;
 
             _timer += Time.deltaTime;
             if (_timer >= _config.ConsumptionRate)
@@ -59,17 +58,23 @@ namespace ArmyCommander.Modules.Economy
             {
                 if (item is MoneyTag money)
                 {
-                    _targetPlayer.CurrencyService.Subtract(money.Type, money.Amount);
-                    _remainingCost -= money.Amount;
-                    
-                    int currentPaid = _config.TotalCost - _remainingCost;
-                    OnCostChanged?.Invoke(currentPaid, _config.TotalCost);
+                    int amountNeeded = Mathf.Min(money.Amount, _remainingCost);
 
-                    Vector3 center = transform.position;
-                    Vector3 visualTarget = center + Random.insideUnitSphere * 0.5f;
-                    visualTarget.y = center.y;
+                    if (amountNeeded <= 0) return;
 
-                    money.AnimateToSpend(visualTarget);
+                    if (_targetPlayer.CurrencyService.TrySpend(money.Type, amountNeeded))
+                    {
+                        _remainingCost -= amountNeeded;
+
+                        int currentPaid = _config.TotalCost - _remainingCost;
+                        OnCostChanged?.Invoke(currentPaid, _config.TotalCost);
+
+                        Vector3 center = transform.position;
+                        Vector3 visualTarget = center + Random.insideUnitSphere * 0.5f;
+                        visualTarget.y = center.y;
+                        
+                        money.AnimateToSpend(visualTarget);
+                    }
                 }
 
                 if (_remainingCost <= 0)

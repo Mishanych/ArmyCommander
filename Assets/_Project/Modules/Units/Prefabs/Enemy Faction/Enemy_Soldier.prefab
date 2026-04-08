@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3257817551788114590}
   - component: {fileID: 9135629352266108703}
   - component: {fileID: 272576383735059129}
+  - component: {fileID: 5127682677229916513}
   m_Layer: 0
   m_Name: Enemy_Soldier
   m_TagString: Untagged
@@ -69,6 +70,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Units.Unit
   _agent: {fileID: 9135629352266108703}
+  _combat: {fileID: 5127682677229916513}
+--- !u!114 &5127682677229916513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5368826859383930267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c655733a59dc4f658ae78777db213138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Units.UnitCombat
+  _firePoint: {fileID: 2180753066431324268}
+--- !u!1 &7735802930835869082
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2180753066431324268}
+  m_Layer: 0
+  m_Name: Firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2180753066431324268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7735802930835869082}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.33300006, y: 0.686, z: 1.118}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8571266178790847466}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8571266177373590892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1063,6 +1109,7 @@ Transform:
   - {fileID: 8571266177455766626}
   - {fileID: 8571266178928664394}
   - {fileID: 8571266178117434095}
+  - {fileID: 2180753066431324268}
   m_Father: {fileID: 3257817551788114590}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8571266178790847477

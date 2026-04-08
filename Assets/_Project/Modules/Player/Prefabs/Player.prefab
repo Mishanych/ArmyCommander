@@ -603,6 +603,7 @@ Transform:
   - {fileID: 607208735538235219}
   - {fileID: 607208736488900723}
   - {fileID: 607208735949252731}
+  - {fileID: 2413484242367629037}
   m_Father: {fileID: 766140896887933691}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &607208735280161121
@@ -1703,6 +1704,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Stacking.StackController
   _stackRoot: {fileID: 3128178925226929761}
   _yOffset: 0.2
+--- !u!1 &7406060448163167265
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2413484242367629037}
+  m_Layer: 0
+  m_Name: Firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2413484242367629037
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7406060448163167265}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.317, y: 0.594, z: 0.579}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 607208735280161150}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9191601284599060954
 GameObject:
   m_ObjectHideFlags: 0
@@ -1716,9 +1748,11 @@ GameObject:
   - component: {fileID: 285157963897649927}
   - component: {fileID: 4780688083874411624}
   - component: {fileID: 483552284721334767}
+  - component: {fileID: 7796323773647335852}
+  - component: {fileID: 6974539461501076575}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1816,6 +1850,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.PlayerCollector
   _stackController: {fileID: 6356338133706364864}
+--- !u!114 &7796323773647335852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9191601284599060954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 362422aaeea14b1d9cd8b6afad71e9df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Player.PlayerUnit
+  _config: {fileID: 11400000, guid: bfadb33fa9f4dec4f99f35710c672df1, type: 2}
+  _combat: {fileID: 6974539461501076575}
+  _maxHealth: 100
+--- !u!114 &6974539461501076575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9191601284599060954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c655733a59dc4f658ae78777db213138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Units.UnitCombat
+  _firePoint: {fileID: 2413484242367629037}
 --- !u!1001 &603616198447560897
 PrefabInstance:
   m_ObjectHideFlags: 0

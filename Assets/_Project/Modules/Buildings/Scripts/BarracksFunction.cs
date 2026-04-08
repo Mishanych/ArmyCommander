@@ -16,6 +16,7 @@ namespace ArmyCommander.Modules.Building
         
         [Inject] private IUnitManager _unitManager;
         [Inject] private UnitFactory _unitFactory;
+        
         private CancellationTokenSource _cts;
 
         public void Initialize()
