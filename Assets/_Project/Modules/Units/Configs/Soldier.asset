@@ -17,11 +17,10 @@ MonoBehaviour:
   UnitName: Soldier
   IsStationary: 0
   MoveSpeed: 4
-  StoppingDistance: 1.5
+  AttackRange: 4
   MaxHealth: 100
   AttackType: 1
   Damage: 10
-  AttackRange: 2
   AttackCooldown: 1.5
   DropType: 0
   DropAmount: 1

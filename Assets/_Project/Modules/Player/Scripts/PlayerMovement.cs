@@ -8,6 +8,7 @@ namespace ArmyCommander.Modules.Player
     {
         [SerializeField] private float _speed = 5f;
         [SerializeField] private float _rotationSpeed = 10f;
+        [SerializeField] private Animator _animator;
         
         private IInputService _inputService;
         
@@ -26,6 +27,9 @@ namespace ArmyCommander.Modules.Player
                 transform.Translate(direction * _speed * Time.fixedDeltaTime, Space.World);
                 RotateTowards(direction);
             }
+            
+            _animator.SetFloat("VelX", direction.x);
+            _animator.SetFloat("VelY", direction.y);
         }
         
         private void RotateTowards(Vector3 direction)

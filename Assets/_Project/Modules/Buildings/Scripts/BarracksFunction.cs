@@ -61,7 +61,7 @@ namespace ArmyCommander.Modules.Building
             }
             catch (OperationCanceledException)
             {
-                Debug.Log($"[Barracks] Spawning is stopped for {gameObject.name}");
+                Debug.Log($"[Barracks] Spawning is stopped");
             }
         }
     }

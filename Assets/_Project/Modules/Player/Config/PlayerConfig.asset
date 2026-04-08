@@ -17,11 +17,10 @@ MonoBehaviour:
   UnitName: Player
   IsStationary: 0
   MoveSpeed: 3.5
-  StoppingDistance: 1.5
+  AttackRange: 5
   MaxHealth: 100
   AttackType: 1
   Damage: 10
-  AttackRange: 2
   AttackCooldown: 1.5
   DropType: 1
   DropAmount: 1

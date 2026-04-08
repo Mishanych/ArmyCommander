@@ -7,13 +7,13 @@ namespace ArmyCommander.Modules.Units
     public class UnitCombat : MonoBehaviour
     {
         [SerializeField] private Transform _firePoint;
-        
+
         [Inject] private IUnitManager _unitManager;
         [Inject] private ProjectileFactory _projectileFactory;
-        
+
         private IAttacker _attacker;
         private IDamageable _currentTarget;
-        
+
         private float _searchTimer;
         private float _attackCooldownTimer;
         private const float SearchInterval = 0.5f;
@@ -21,7 +21,7 @@ namespace ArmyCommander.Modules.Units
         public void Initialize(IAttacker attacker)
         {
             _attacker = attacker;
-            enabled = true; 
+            enabled = true;
         }
 
         private void Update()
@@ -44,10 +44,15 @@ namespace ArmyCommander.Modules.Units
             _searchTimer -= Time.deltaTime;
             if (_searchTimer <= 0)
             {
-                if (_unitManager != null && _attacker.Config != null)
+                _currentTarget = _unitManager.GetNearestEnemy(
+                    transform.position,
+                    _attacker.Config.FactionType);
+
+                if (_currentTarget == null)
                 {
-                    _currentTarget = _unitManager.GetNearestEnemy(transform.position, _attacker.Config.FactionType);
+                    _attacker.StopAttackAnimation();
                 }
+
                 _searchTimer = SearchInterval;
             }
         }
@@ -55,30 +60,34 @@ namespace ArmyCommander.Modules.Units
         private void HandleCombatBehavior()
         {
             var targetMB = _currentTarget as MonoBehaviour;
-            if (targetMB == null) return;
+            if (targetMB == null || _currentTarget.IsDead)
+            {
+                _currentTarget = null;
+                _attacker.StopAttackAnimation();
+                return;
+            }
 
             float distance = Vector3.Distance(transform.position, targetMB.transform.position);
 
-            if (distance <= _attacker.Config.StoppingDistance)
+            if (distance <= _attacker.Config.AttackRange)
             {
                 _attacker.Stop();
                 RotateTowardsTarget(targetMB.transform.position);
+                _attacker.PlayAttackAnimation();
 
                 if (Time.time >= _attackCooldownTimer)
                 {
-                    _attacker.PlayAttackAnimation();
+                    ApplyDamage();
                     _attackCooldownTimer = Time.time + _attacker.Config.AttackCooldown;
                 }
             }
             else
             {
+                _attacker.StopAttackAnimation();
+
                 if (!_attacker.Config.IsStationary)
                 {
                     _attacker.MoveTo(targetMB.transform.position);
-                }
-                else
-                {
-                    _attacker.Stop();
                 }
             }
         }
@@ -93,7 +102,7 @@ namespace ArmyCommander.Modules.Units
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
             }
         }
-        
+
         public void ApplyDamage()
         {
             if (_attacker == null || _currentTarget == null || _currentTarget.IsDead) return;
@@ -103,9 +112,9 @@ namespace ArmyCommander.Modules.Units
                 Vector3 spawnPos = _firePoint != null ? _firePoint.position : transform.position;
 
                 _projectileFactory.Spawn(
-                    _attacker.Config.ProjectilePrefab, 
-                    spawnPos, 
-                    _currentTarget, 
+                    _attacker.Config.ProjectilePrefab,
+                    spawnPos,
+                    _currentTarget,
                     _attacker.Config.Damage);
             }
             else

@@ -13,5 +13,6 @@ namespace ArmyCommander.Core
         void MoveTo(Vector3 destination);
         void Stop();
         void PlayAttackAnimation();
+        void StopAttackAnimation();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using ArmyCommander.Core;
+using ArmyCommander.Modules.Animations;
 using ArmyCommander.Modules.Economy;
 using ArmyCommander.Modules.Units.Scripts;
 using Cysharp.Threading.Tasks;
@@ -16,7 +17,8 @@ namespace ArmyCommander.Modules.Units
     {
         [Header("Components")]
         [SerializeField] private NavMeshAgent _agent;
-        [SerializeField] protected UnitCombat _combat;
+        [SerializeField] private UnitCombat _combat;
+        [SerializeField] private CharacterAnimation _characterAnimation;
 
         [Inject] private IUnitManager _unitManager;
         [Inject] private UnitFactory _unitFactory;
@@ -41,7 +43,7 @@ namespace ArmyCommander.Modules.Units
 
             _agent.enabled = true;
             _agent.speed = _config.MoveSpeed;
-            _agent.stoppingDistance = _config.StoppingDistance;
+            _agent.stoppingDistance = _config.AttackRange;
             _agent.Warp(position); 
 
             _combat.Initialize(this);
@@ -121,7 +123,13 @@ namespace ArmyCommander.Modules.Units
 
         public void PlayAttackAnimation()
         {
+            _characterAnimation.SetShooting(true);
             _combat.ApplyDamage();
+        }
+        
+        public void StopAttackAnimation()
+        {
+            _characterAnimation.SetShooting(false);
         }
 
         public void TakeDamage(float amount)
@@ -134,6 +142,8 @@ namespace ArmyCommander.Modules.Units
         
         private void Die()
         {
+            _characterAnimation.PlayDie();
+            
             var money = _moneySpawner.Spawn(transform.position, Quaternion.identity, _config.DropType);
             AnimateMoneyDrop(money);
 
@@ -154,6 +164,21 @@ namespace ArmyCommander.Modules.Units
         {
             await UniTask.Delay(TimeSpan.FromSeconds(3f));
             _unitFactory?.Despawn(this, _config.Prefab);
+        }
+        
+        private void Update()
+        {
+            if (_agent.enabled)
+            {
+                float normalizedSpeed = _agent.velocity.magnitude / _agent.speed;
+
+                _characterAnimation.SetMoveSpeed(normalizedSpeed, 0f);
+
+                if (normalizedSpeed > 0.1f)
+                {
+                    _characterAnimation.SetShooting(false);
+                }
+            }
         }
     }
 }

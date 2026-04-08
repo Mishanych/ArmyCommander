@@ -14,13 +14,12 @@ namespace ArmyCommander.Modules.Units.Scripts
         [Header("Movement")]
         public bool IsStationary;
         public float MoveSpeed = 3.5f;
-        public float StoppingDistance = 1.5f;
+        public float AttackRange = 1.5f;
 
         [Header("Stats")]
         public float MaxHealth = 100f;
         public AttackType AttackType;
         public float Damage = 10f;
-        public float AttackRange = 2f;
         public float AttackCooldown = 1.5f;
 
         [Header("Loot Settings")]
