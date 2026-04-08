@@ -74,14 +74,12 @@ namespace ArmyCommander.Modules.Units
 
         public void SetAttackState(bool active)
         {
-            if (IsAttackCommanded == active) return;
-            
-            IsAttackCommanded = active;
-            
             if (active)
             {
                 OnAttackCommanded?.Invoke();
             }
+    
+            IsAttackCommanded = false; 
         }
         
         public IDamageable GetNearestEnemy(Vector3 myPos, FactionType myFaction)

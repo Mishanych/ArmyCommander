@@ -72,15 +72,8 @@ namespace ArmyCommander.Modules.Units
 
             _combat.enabled = false; 
 
-            if (_unitManager.IsAttackCommanded)
-            {
-                StartCombatBehavior();
-            }
-            else
-            {
-                _currentState = UnitState.MovingToRally;
-                HandleRallyPointUpdate(_unitManager.RallyPoint);
-            }
+            _currentState = UnitState.MovingToRally;
+            HandleRallyPointUpdate(_unitManager.RallyPoint);
         }
 
         private void SetupEnemyUnit()
@@ -104,9 +97,12 @@ namespace ArmyCommander.Modules.Units
 
         private void StartCombatBehavior()
         {
-            _currentState = UnitState.Combat;
-            _unitManager.OnRallyPointUpdated.RemoveListener(HandleRallyPointUpdate);
-            _combat.enabled = true;
+            if (_currentState == UnitState.MovingToRally)
+            {
+                _currentState = UnitState.Combat;
+                _unitManager.OnRallyPointUpdated.RemoveListener(HandleRallyPointUpdate);
+                _combat.enabled = true;
+            }
         }
 
         public void MoveTo(Vector3 destination)
