@@ -3,6 +3,7 @@ using ArmyCommander.Modules.Animations;
 using ArmyCommander.Modules.Units;
 using ArmyCommander.Modules.Units.Scripts;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace ArmyCommander.Modules.Player
@@ -17,7 +18,12 @@ namespace ArmyCommander.Modules.Player
         [Header("Health Settings")]
         [SerializeField] private float _maxHealth = 100f;
         
+        [Header("UI")]
+        [SerializeField] private GameObject _healthBarRoot;
+        [SerializeField] private Slider _healthSlider;
+        
         private float _currentHealth;
+        private bool _isUIInitialized = false;
 
         [Inject] private IUnitManager _unitManager;
 
@@ -29,6 +35,9 @@ namespace ArmyCommander.Modules.Player
         private void Awake()
         {
             _currentHealth = _maxHealth;
+            
+            if (_healthBarRoot != null)
+                _healthBarRoot.SetActive(false);
         }
 
         private void Start()
@@ -43,17 +52,24 @@ namespace ArmyCommander.Modules.Player
         {
             if (IsDead) return;
 
-            _currentHealth -= damage;
-            Debug.Log($"[Player] HP: {_currentHealth}");
-
-            if (IsDead)
+            if (!_isUIInitialized && _healthBarRoot != null)
             {
-                Die();
+                _healthBarRoot.SetActive(true);
+                _isUIInitialized = true;
             }
+
+            _currentHealth -= damage;
+    
+            if (_healthSlider != null)
+                _healthSlider.value = _currentHealth / _maxHealth;
+
+            if (IsDead) 
+                Die();
         }
 
         private void Die()
         {
+            _healthBarRoot.SetActive(false);
             _characterAnimation.PlayDie();
             Debug.Log("Player is Dead!");
         }

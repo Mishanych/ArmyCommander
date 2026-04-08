@@ -2,6 +2,7 @@
 using ArmyCommander.Core;
 using ArmyCommander.Modules.Animations;
 using ArmyCommander.Modules.Economy;
+using ArmyCommander.Modules.Effects;
 using ArmyCommander.Modules.Units.Scripts;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -19,6 +20,7 @@ namespace ArmyCommander.Modules.Units
         [SerializeField] private NavMeshAgent _agent;
         [SerializeField] private UnitCombat _combat;
         [SerializeField] private CharacterAnimation _characterAnimation;
+        [SerializeField] private HitFlash _hitFlash;
 
         [Inject] private IUnitManager _unitManager;
         [Inject] private UnitFactory _unitFactory;
@@ -137,7 +139,12 @@ namespace ArmyCommander.Modules.Units
             if (IsDead) return;
 
             _currentHealth -= amount;
-            if (IsDead) Die();
+    
+            if (_hitFlash != null)
+                _hitFlash.PlayFlash();
+
+            if (IsDead)
+                Die();
         }
         
         private void Die()
