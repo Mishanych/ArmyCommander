@@ -7,8 +7,10 @@ using Zenject;
 
 namespace ArmyCommander.Modules.Economy
 {
-    public class MoneyTag : MonoBehaviour, ICollectible, IStackable, IPoolable<Vector3, Quaternion, IMemoryPool>
+    public class MoneyTag : MonoBehaviour, ICollectible, IStackable, IPoolable<Vector3, IMemoryPool>
     {
+        private readonly Quaternion DefaultRotation = Quaternion.Euler(0f,0f,-90f);
+        
         [SerializeField] private CurrencyType _type;
         [SerializeField] private int _amount = 1;
 
@@ -28,18 +30,22 @@ namespace ArmyCommander.Modules.Economy
             _visualizer.SetStackTarget(localPosition);
         }
         
-        public void OnSpawned(Vector3 position, Quaternion rotation, IMemoryPool pool)
+        public void OnSpawned(Vector3 position, IMemoryPool pool)
         {
             _pool = pool;
             _parent = transform.parent;
             
             transform.position = position;
-            transform.localRotation = rotation;
+            transform.localRotation = DefaultRotation;
             gameObject.SetActive(true);
+
+            _visualizer.PlayDropAnimation(position);
         }
         
         public void OnDespawned()
         {
+            _visualizer.StopAllAnimations();
+            
             _collider.enabled = true;
             transform.SetParent(_parent);
             gameObject.SetActive(false);
@@ -47,6 +53,8 @@ namespace ArmyCommander.Modules.Economy
         
         public void Collect(PlayerCollector playerCollector)
         {
+            _visualizer.StopIdle();
+            
             JumpToStack(playerCollector.StackController);
             playerCollector.CurrencyService.Add(_type, _amount);
         }
@@ -81,6 +89,6 @@ namespace ArmyCommander.Modules.Economy
             _visualizer.StopStackFollowing();
         }
         
-        public class Pool : PoolableMemoryPool<Vector3, Quaternion, IMemoryPool, MoneyTag> { }
+        public class Pool : PoolableMemoryPool<Vector3, IMemoryPool, MoneyTag> { }
     }
 }

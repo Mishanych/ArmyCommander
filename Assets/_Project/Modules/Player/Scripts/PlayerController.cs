@@ -1,7 +1,10 @@
-﻿using ArmyCommander.Core;
+﻿using System;
+using ArmyCommander.Core;
 using ArmyCommander.Modules.Animations;
+using ArmyCommander.Modules.Level;
 using ArmyCommander.Modules.Units;
 using ArmyCommander.Modules.Units.Scripts;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -10,6 +13,9 @@ namespace ArmyCommander.Modules.Player
 {
     public class PlayerController : MonoBehaviour, IAttacker, IDamageable
     {
+        [SerializeField] private GameObject _stack;
+        [SerializeField] private Rigidbody _rigidbody;
+        
         [Header("Combat Settings")]
         [SerializeField] private UnitConfig _config;
         [SerializeField] private UnitCombat _combat;
@@ -26,6 +32,7 @@ namespace ArmyCommander.Modules.Player
         private bool _isUIInitialized = false;
 
         [Inject] private IUnitManager _unitManager;
+        [Inject] private LevelManager _levelManager;
 
         public float Health => _currentHealth;
         public bool IsDead => _currentHealth <= 0;
@@ -64,14 +71,29 @@ namespace ArmyCommander.Modules.Player
                 _healthSlider.value = _currentHealth / _maxHealth;
 
             if (IsDead) 
-                Die();
+                Die().Forget();
         }
 
-        private void Die()
+        private async UniTaskVoid Die()
         {
+            _rigidbody.linearVelocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+            _rigidbody.isKinematic = true;
+            
+            _stack.SetActive(false);
             _healthBarRoot.SetActive(false);
             _characterAnimation.PlayDie();
-            Debug.Log("Player is Dead!");
+    
+            Debug.Log("Player is Dead! Waiting for animation...");
+
+            try 
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(1.5f), 
+                    cancellationToken: this.GetCancellationTokenOnDestroy());
+
+                _levelManager.FinishLevel(false);
+            }
+            catch (OperationCanceledException) { }
         }
 
         public void MoveTo(Vector3 destination) 

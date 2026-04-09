@@ -2,6 +2,7 @@ using ArmyCommander.Core;
 using ArmyCommander.Input;
 using ArmyCommander.Modules.Camera;
 using ArmyCommander.Modules.Economy;
+using ArmyCommander.Modules.Level;
 using ArmyCommander.Modules.Player;
 using ArmyCommander.Modules.Units;
 using UnityEngine;
@@ -15,6 +16,9 @@ namespace ArmyCommander.Infrastructure
         [SerializeField] private PlayerMovement _player;
         [SerializeField] private CameraFollower _cameraFollower;
         
+        [Header("UI")]
+        [SerializeField] private LevelManager _levelManager;
+        
         [Header("Prefabs")]
         [SerializeField] private GameObject _silverMoneyTagPrefab;
         [SerializeField] private GameObject _goldMoneyTagPrefab;
@@ -24,6 +28,7 @@ namespace ArmyCommander.Infrastructure
             Container.Bind<PlayerMovement>().FromInstance(_player).AsSingle();
             Container.Bind<CameraFollower>().FromInstance(_cameraFollower).AsSingle();
             Container.Bind<IInputService>().FromInstance(_joystick).AsSingle();
+            Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle();
             
             Container.BindInterfacesTo<GameStartup>().AsSingle();
             
@@ -53,7 +58,7 @@ namespace ArmyCommander.Infrastructure
         {
             Container.BindInterfacesAndSelfTo<UnitManager>()
                 .AsSingle()
-                .WithArguments(20);
+                .WithArguments(10);
 
             Container.Bind<UnitFactory>().AsSingle();
             Container.Bind<ProjectileFactory>().AsSingle();

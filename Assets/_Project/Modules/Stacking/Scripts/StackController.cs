@@ -9,7 +9,7 @@ namespace ArmyCommander.Modules.Stacking
     public class StackController : MonoBehaviour
     {
         [SerializeField] private Transform _stackRoot;
-        [SerializeField] private float _yOffset = 0.2f;
+        [SerializeField] private float _yOffset = 0.1f;
 
         public Transform StackRoot => _stackRoot;
     

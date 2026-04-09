@@ -17,12 +17,12 @@ namespace ArmyCommander.Modules.Economy
             _silverPool = silverPool;
         }
 
-        public MoneyTag Spawn(Vector3 position, Quaternion rotation, CurrencyType type)
+        public MoneyTag Spawn(Vector3 position, CurrencyType type)
         {
             return type switch
             {
-                CurrencyType.Gold => _goldPool.Spawn(position, rotation, _goldPool),
-                CurrencyType.Silver => _silverPool.Spawn(position, rotation, _silverPool),
+                CurrencyType.Gold => _goldPool.Spawn(position, _goldPool),
+                CurrencyType.Silver => _silverPool.Spawn(position, _silverPool),
                 _ => throw new System.ArgumentOutOfRangeException()
             };
         }

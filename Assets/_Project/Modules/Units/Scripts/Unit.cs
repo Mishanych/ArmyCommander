@@ -10,7 +10,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using Zenject;
 using IPoolable = ArmyCommander.Core.IPoolable;
-using Random = UnityEngine.Random;
 
 namespace ArmyCommander.Modules.Units
 {
@@ -41,14 +40,26 @@ namespace ArmyCommander.Modules.Units
             _config = config;
             _currentHealth = _config.MaxHealth;
 
+            transform.position = position;
             gameObject.SetActive(true);
 
-            _agent.enabled = true;
-            _agent.speed = _config.MoveSpeed;
-            _agent.stoppingDistance = _config.AttackRange;
-            _agent.Warp(position); 
+            if (NavMesh.SamplePosition(position, out NavMeshHit hit, 2.0f, NavMesh.AllAreas))
+            {
+                transform.position = hit.position;
+        
+                _agent.enabled = true;
+                _agent.speed = _config.MoveSpeed;
+                _agent.stoppingDistance = _config.AttackRange;
+        
+                _agent.Warp(hit.position); 
+            }
+            else
+            {
+                _agent.enabled = false; 
+            }
 
             _combat.Initialize(this);
+            _characterAnimation.PlaySpawn();
 
             if (_config.FactionType == FactionType.Player)
                 SetupPlayerUnit();
@@ -151,8 +162,7 @@ namespace ArmyCommander.Modules.Units
         {
             _characterAnimation.PlayDie();
             
-            var money = _moneySpawner.Spawn(transform.position, Quaternion.identity, _config.DropType);
-            AnimateMoneyDrop(money);
+            _moneySpawner.Spawn(transform.position, _config.DropType);
 
             _agent.enabled = false;
             _combat.enabled = false;
@@ -161,15 +171,23 @@ namespace ArmyCommander.Modules.Units
             DespawnWithDelay().Forget();
         }
 
-        private void AnimateMoneyDrop(MoneyTag money)
-        {
-            Vector3 jumpTarget = transform.position + new Vector3(Random.Range(-1.5f, 1.5f), 0, Random.Range(-1.5f, 1.5f));
-            money.transform.DOJump(jumpTarget, 2f, 1, 0.5f);
-        }
-
         private async UniTaskVoid DespawnWithDelay()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(3f));
+            // 1. Пауза, щоб юніт просто полежав мертвим
+            await UniTask.Delay(TimeSpan.FromSeconds(1.5f), cancellationToken: this.GetCancellationTokenOnDestroy());
+
+            // 2. Анімація зникання
+            float duration = 1f;
+    
+            // Рухаємо вниз від поточної позиції
+            transform.DOMoveY(transform.position.y - 1.5f, duration).SetEase(Ease.InQuad);
+            // Зменшуємо масштаб
+            transform.DOScale(Vector3.zero, duration).SetEase(Ease.InBack);
+
+            // 3. Замість .ToUniTask() просто чекаємо ту саму секунду
+            await UniTask.Delay(TimeSpan.FromSeconds(duration), cancellationToken: this.GetCancellationTokenOnDestroy());
+
+            // 4. Повертаємо в пул
             _unitFactory?.Despawn(this, _config.Prefab);
         }
         

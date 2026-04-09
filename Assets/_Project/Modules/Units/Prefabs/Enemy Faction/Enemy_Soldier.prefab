@@ -1531,6 +1531,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Animations.CharacterAnimation
   _animator: {fileID: 6840501015699607147}
+  _visualModel: {fileID: 6840501015699607156}
+  _spawnDuration: 0.5
+  _jumpPower: 1.5
 --- !u!95 &6840501015699607147
 Animator:
   serializedVersion: 7

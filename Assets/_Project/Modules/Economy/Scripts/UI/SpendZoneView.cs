@@ -1,5 +1,4 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +8,7 @@ namespace ArmyCommander.Modules.Economy
     {
         [SerializeField] private SpendingZone _spendZone;
         [SerializeField] private TextMeshProUGUI _costText;
-        [SerializeField] private Image _iconImage;
+        [SerializeField] private Image _previewImage;
         [SerializeField] private Image _progressBar;
 
         private void Start()
@@ -21,11 +20,8 @@ namespace ArmyCommander.Modules.Economy
         private void OnEnable()
         {
             _spendZone.OnCostChanged.AddListener(UpdateUI);
-            
-            if (_spendZone.Config != null && _iconImage != null)
-            {
-                //_iconImage.sprite = _spendZone.Config.CurrencyIcon;
-            }
+
+            TogglePreviewImage(true);
         }
 
         private void OnDisable()
@@ -35,11 +31,24 @@ namespace ArmyCommander.Modules.Economy
 
         private void UpdateUI(int current, int total)
         {
+            if (current > 0)
+            {
+                TogglePreviewImage(false);
+            }
+            
             _costText.text = $"{current} / {total}";
 
             if (_progressBar != null)
             {
                 _progressBar.fillAmount = (float)current / total;
+            }
+        }
+
+        private void TogglePreviewImage(bool toEnable)
+        {
+            if (_previewImage != null)
+            {
+                _previewImage.gameObject.SetActive(toEnable);
             }
         }
     }

@@ -13,6 +13,7 @@ namespace ArmyCommander.Modules.Building
     {
         [SerializeField] private BarracksConfig _config;
         [SerializeField] private UnitConfig _unitToSpawn;
+        [SerializeField] private Transform _spawnPoint;
         
         [Inject] private IUnitManager _unitManager;
         [Inject] private UnitFactory _unitFactory;
@@ -54,7 +55,7 @@ namespace ArmyCommander.Modules.Building
 
                     if (_unitManager.CanSpawn)
                     {
-                        Unit unit = _unitFactory.Create(_unitToSpawn, transform.position);
+                        Unit unit = _unitFactory.Create(_unitToSpawn, _spawnPoint.position);
                         _unitManager.RegisterUnit(unit, FactionType.Player);
                     }
                 }
