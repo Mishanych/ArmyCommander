@@ -6,13 +6,14 @@ using ArmyCommander.Modules.Units;
 using ArmyCommander.Modules.Units.Scripts;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace ArmyCommander.Modules.Player
 {
     public class PlayerController : MonoBehaviour, IAttacker, IDamageable
     {
+        [FormerlySerializedAs("_health")] [SerializeField] private PlayerHealth _playerHealth;
         [SerializeField] private GameObject _stack;
         [SerializeField] private Rigidbody _rigidbody;
         
@@ -20,31 +21,26 @@ namespace ArmyCommander.Modules.Player
         [SerializeField] private UnitConfig _config;
         [SerializeField] private UnitCombat _combat;
         [SerializeField] private CharacterAnimation _characterAnimation;
-        
-        [Header("Health Settings")]
-        [SerializeField] private float _maxHealth = 100f;
-        
-        [Header("UI")]
-        [SerializeField] private GameObject _healthBarRoot;
-        [SerializeField] private Slider _healthSlider;
-        
-        private float _currentHealth;
-        private bool _isUIInitialized = false;
 
         [Inject] private IUnitManager _unitManager;
         [Inject] private LevelManager _levelManager;
+        [Inject] private PlayerProvider _playerProvider;
 
-        public float Health => _currentHealth;
-        public bool IsDead => _currentHealth <= 0;
+        public bool IsDead => _playerHealth != null && _playerHealth.IsDead;
+        public float Health => _playerHealth != null ? _playerHealth.CurrentHealth : 0f;
+
         public UnitConfig Config => _config;
         public IUnitManager UnitManager => _unitManager;
-        
-        private void Awake()
+
+        public void TakeDamage(float damage)
         {
-            _currentHealth = _maxHealth;
-            
-            if (_healthBarRoot != null)
-                _healthBarRoot.SetActive(false);
+            if (_playerHealth != null)
+                _playerHealth.TakeDamage(damage);
+        }
+
+        private void Awake() 
+        {
+            _playerProvider.PlayerHealth = _playerHealth;
         }
 
         private void Start()
@@ -55,23 +51,21 @@ namespace ArmyCommander.Modules.Player
             _unitManager.RegisterUnit(this, FactionType.Player);
         }
 
-        public void TakeDamage(float damage)
+        private void OnEnable()
         {
-            if (IsDead) return;
+            if (_playerHealth != null)
+                _playerHealth.OnDeath += OnDeath;
+        }
 
-            if (!_isUIInitialized && _healthBarRoot != null)
-            {
-                _healthBarRoot.SetActive(true);
-                _isUIInitialized = true;
-            }
+        private void OnDisable()
+        {
+            if (_playerHealth != null)
+                _playerHealth.OnDeath -= OnDeath;
+        }
 
-            _currentHealth -= damage;
-    
-            if (_healthSlider != null)
-                _healthSlider.value = _currentHealth / _maxHealth;
-
-            if (IsDead) 
-                Die().Forget();
+        private void OnDeath()
+        {
+            Die().Forget();
         }
 
         private async UniTaskVoid Die()
@@ -81,10 +75,9 @@ namespace ArmyCommander.Modules.Player
             _rigidbody.isKinematic = true;
             
             _stack.SetActive(false);
-            _healthBarRoot.SetActive(false);
             _characterAnimation.PlayDie();
     
-            Debug.Log("Player is Dead! Waiting for animation...");
+            Debug.Log("Player is Dead! CharacterAnimation is playing...");
 
             try 
             {

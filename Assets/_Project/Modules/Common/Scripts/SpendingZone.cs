@@ -1,9 +1,9 @@
-﻿using ArmyCommander.Modules.Common;
+﻿using ArmyCommander.Modules.Economy;
 using ArmyCommander.Modules.Player;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace ArmyCommander.Modules.Economy
+namespace ArmyCommander.Modules.Common
 {
     public class SpendingZone : BaseZone
     {
@@ -14,6 +14,7 @@ namespace ArmyCommander.Modules.Economy
 
         public SpendingZoneConfig Config => _config;
         
+        private int _currentTotalCost;
         private int _remainingCost;
         private float _timer;
         private PlayerCollector _targetPlayer;
@@ -22,8 +23,7 @@ namespace ArmyCommander.Modules.Economy
         {
             if (_config != null)
             {
-                _remainingCost = _config.TotalCost;
-                OnCostChanged?.Invoke(_config.TotalCost - _remainingCost, _config.TotalCost);
+                SetRequiredAmount(_config.TotalCost);
             }
         }
 
@@ -49,10 +49,18 @@ namespace ArmyCommander.Modules.Economy
             }
         }
         
+        public void SetRequiredAmount(int amount)
+        {
+            _currentTotalCost = amount;
+            _remainingCost = amount;
+            _timer = 0;
+    
+            OnCostChanged?.Invoke(0, _currentTotalCost);
+        }
+        
         private void TryConsume()
         {
             if (_remainingCost <= 0) return;
-            if (!_targetPlayer.CurrencyService.HasEnough(_config.RequiredType, 1)) return;
             
             if (_targetPlayer.StackController.TryPopItem(_config.RequiredType, out var item))
             {
@@ -66,8 +74,8 @@ namespace ArmyCommander.Modules.Economy
                     {
                         _remainingCost -= amountNeeded;
 
-                        int currentPaid = _config.TotalCost - _remainingCost;
-                        OnCostChanged?.Invoke(currentPaid, _config.TotalCost);
+                        int currentPaid = _currentTotalCost - _remainingCost;
+                        OnCostChanged?.Invoke(currentPaid, _currentTotalCost);
 
                         Vector3 center = transform.position;
                         Vector3 visualTarget = center + Random.insideUnitSphere * 0.5f;
@@ -80,7 +88,6 @@ namespace ArmyCommander.Modules.Economy
                 if (_remainingCost <= 0)
                 {
                     OnPurchased?.Invoke();
-                    gameObject.SetActive(false);
                 }
             }
         }

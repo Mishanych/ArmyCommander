@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using ArmyCommander.Modules.Economy;
+using ArmyCommander.Modules.Common;
 using UnityEngine;
 using Zenject;
 

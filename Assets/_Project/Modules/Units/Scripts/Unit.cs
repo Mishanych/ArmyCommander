@@ -40,6 +40,7 @@ namespace ArmyCommander.Modules.Units
             _config = config;
             _currentHealth = _config.MaxHealth;
 
+            transform.localScale = Vector3.one;
             transform.position = position;
             gameObject.SetActive(true);
 

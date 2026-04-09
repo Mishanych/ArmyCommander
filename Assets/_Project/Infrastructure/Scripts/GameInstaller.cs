@@ -25,6 +25,7 @@ namespace ArmyCommander.Infrastructure
 
         public override void InstallBindings()
         {
+            Container.BindInterfacesAndSelfTo<PlayerProvider>().AsSingle();
             Container.Bind<PlayerMovement>().FromInstance(_player).AsSingle();
             Container.Bind<CameraFollower>().FromInstance(_cameraFollower).AsSingle();
             Container.Bind<IInputService>().FromInstance(_joystick).AsSingle();

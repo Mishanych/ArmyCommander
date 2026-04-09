@@ -60,6 +60,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GoldMoneyTag
       objectReference: {fileID: 0}
+    - target: {fileID: 7871141085091659751, guid: a94aa64b313d5dd4ab5323e67cda876d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891178496670550138, guid: a94aa64b313d5dd4ab5323e67cda876d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: dd41db2cdb4e66e4985303e1287ab101, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

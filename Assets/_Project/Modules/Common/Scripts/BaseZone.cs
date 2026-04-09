@@ -7,7 +7,7 @@ namespace ArmyCommander.Modules.Common
     {
         private const string PlayerTag = "Player";
         
-        protected bool IsPlayerInside;
+        public bool IsPlayerInside;
 
         private void OnTriggerEnter(Collider other)
         {

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using ArmyCommander.Modules.Common;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,7 @@ namespace ArmyCommander.Modules.Economy
         [SerializeField] private Image _previewImage;
         [SerializeField] private Image _progressBar;
 
-        private void Start()
+        private void Awake()
         {
             _progressBar.fillAmount = 0f;
             _costText.text = string.Empty;
