@@ -15,6 +15,14 @@ namespace ArmyCommander.Modules.Units
 {
     public class Unit : MonoBehaviour, IDamageable, IAttacker, IPoolable
     {
+        private const float NavMeshSampleRange = 2f;
+        
+        private const float MovementThreshold = 0.1f;
+
+        private const float DeathDelaySeconds = 1.5f;
+        private const float DespawnDuration = 1.0f;
+        private const float SinkDepth = 1.5f;
+        
         [Header("Components")]
         [SerializeField] private NavMeshAgent _agent;
         [SerializeField] private UnitCombat _combat;
@@ -44,7 +52,7 @@ namespace ArmyCommander.Modules.Units
             transform.position = position;
             gameObject.SetActive(true);
 
-            if (NavMesh.SamplePosition(position, out NavMeshHit hit, 2.0f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(position, out NavMeshHit hit, NavMeshSampleRange, NavMesh.AllAreas))
             {
                 transform.position = hit.position;
         
@@ -174,21 +182,12 @@ namespace ArmyCommander.Modules.Units
 
         private async UniTaskVoid DespawnWithDelay()
         {
-            // 1. Пауза, щоб юніт просто полежав мертвим
-            await UniTask.Delay(TimeSpan.FromSeconds(1.5f), cancellationToken: this.GetCancellationTokenOnDestroy());
+            await UniTask.Delay(TimeSpan.FromSeconds(DeathDelaySeconds), cancellationToken: this.GetCancellationTokenOnDestroy());
 
-            // 2. Анімація зникання
-            float duration = 1f;
-    
-            // Рухаємо вниз від поточної позиції
-            transform.DOMoveY(transform.position.y - 1.5f, duration).SetEase(Ease.InQuad);
-            // Зменшуємо масштаб
-            transform.DOScale(Vector3.zero, duration).SetEase(Ease.InBack);
+            transform.DOMoveY(transform.position.y - SinkDepth, DespawnDuration).SetEase(Ease.InQuad);
+            transform.DOScale(Vector3.zero, DespawnDuration).SetEase(Ease.InBack);
 
-            // 3. Замість .ToUniTask() просто чекаємо ту саму секунду
-            await UniTask.Delay(TimeSpan.FromSeconds(duration), cancellationToken: this.GetCancellationTokenOnDestroy());
-
-            // 4. Повертаємо в пул
+            await UniTask.Delay(TimeSpan.FromSeconds(DespawnDuration), cancellationToken: this.GetCancellationTokenOnDestroy());
             _unitFactory?.Despawn(this, _config.Prefab);
         }
         
@@ -200,7 +199,7 @@ namespace ArmyCommander.Modules.Units
 
                 _characterAnimation.SetMoveSpeed(normalizedSpeed, 0f);
 
-                if (normalizedSpeed > 0.1f)
+                if (normalizedSpeed > MovementThreshold)
                 {
                     _characterAnimation.SetShooting(false);
                 }

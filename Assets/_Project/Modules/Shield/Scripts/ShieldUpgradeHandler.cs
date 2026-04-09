@@ -1,4 +1,5 @@
 ﻿using ArmyCommander.Modules.Common;
+using ArmyCommander.Modules.Effects;
 using ArmyCommander.Modules.Player;
 using UnityEngine;
 using Zenject;
@@ -11,8 +12,10 @@ namespace ArmyCommander.Modules.Shield
         [SerializeField] private ShieldConfig _config;
 
         [SerializeField] private ShieldZoneUI _zoneUI;
+        [SerializeField] private GameObject _shieldUpgradeEffectPrefab;
         
         [Inject] private PlayerProvider _playerProvider;
+        [Inject] private EffectInstance.Factory _effectFactory;
         
         private int _currentLevelIndex = 0;
 
@@ -42,6 +45,7 @@ namespace ArmyCommander.Modules.Shield
             if (_playerProvider.PlayerHealth != null)
             {
                 _playerProvider.PlayerHealth.UpdateShieldStatus(currentLevelData.Protection, currentLevelData.Icon);
+                SpawnVFX(_shieldUpgradeEffectPrefab);
             }
 
             UpdateVisuals();
@@ -65,9 +69,15 @@ namespace ArmyCommander.Modules.Shield
         private void UpdateVisuals()
         {
             bool isMax = _config.IsMaxLevel(_currentLevelIndex);
-            
             _zoneUI.UpdateLevelDisplay(_currentLevelIndex, isMax);
-
+        }
+        
+        private void SpawnVFX(GameObject prefab)
+        {
+            if (prefab == null) return;
+            
+            var effect = _effectFactory.Create(prefab);
+            effect.PlayAt(_playerProvider.PlayerHealth.transform);
         }
     }
 }

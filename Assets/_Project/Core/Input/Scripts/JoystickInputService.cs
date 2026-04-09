@@ -24,6 +24,10 @@ namespace ArmyCommander.Input
             _canvasGroup.alpha = HiddenAlpha;
             _visuals.localScale = Vector3.zero;
         }
+        public void Enable(bool isActive)
+        {
+            gameObject.SetActive(isActive);
+        }
 
         public void OnPointerDown(PointerEventData eventData)
         {

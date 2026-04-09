@@ -2,6 +2,7 @@ using ArmyCommander.Core;
 using ArmyCommander.Input;
 using ArmyCommander.Modules.Camera;
 using ArmyCommander.Modules.Economy;
+using ArmyCommander.Modules.Effects;
 using ArmyCommander.Modules.Level;
 using ArmyCommander.Modules.Player;
 using ArmyCommander.Modules.Units;
@@ -12,6 +13,9 @@ namespace ArmyCommander.Infrastructure
 {
     public class GameInstaller : MonoInstaller
     {
+        private const int DefaultMoneyPoolSize = 10;
+        private const int DefaultPlayerUnitsPoolSize = 10;
+        
         [SerializeField] private JoystickInputService _joystick;
         [SerializeField] private PlayerMovement _player;
         [SerializeField] private CameraFollower _cameraFollower;
@@ -35,6 +39,9 @@ namespace ArmyCommander.Infrastructure
             
             InstallEconomy();
             InstallUnits();
+            
+            Container.BindFactory<Object, EffectInstance, EffectInstance.Factory>()
+                .FromFactory<PrefabFactory<EffectInstance>>();
         }
 
         private void InstallEconomy()
@@ -50,7 +57,7 @@ namespace ArmyCommander.Infrastructure
         {
             Container.BindMemoryPool<MoneyTag, MoneyTag.Pool>()
                 .WithId(type)
-                .WithInitialSize(10)
+                .WithInitialSize(DefaultMoneyPoolSize)
                 .FromComponentInNewPrefab(prefab)
                 .UnderTransformGroup($"Pool_Money_{type}");
         }
@@ -59,7 +66,7 @@ namespace ArmyCommander.Infrastructure
         {
             Container.BindInterfacesAndSelfTo<UnitManager>()
                 .AsSingle()
-                .WithArguments(10);
+                .WithArguments(DefaultPlayerUnitsPoolSize);
 
             Container.Bind<UnitFactory>().AsSingle();
             Container.Bind<ProjectileFactory>().AsSingle();

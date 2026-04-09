@@ -7,6 +7,8 @@ namespace ArmyCommander.Modules.Common
 {
     public class SpendingZone : BaseZone
     {
+        private const float VisualTargetRadius = 0.5f;
+        
         [SerializeField] private SpendingZoneConfig _config;
         
         public UnityEvent OnPurchased = new();
@@ -78,7 +80,7 @@ namespace ArmyCommander.Modules.Common
                         OnCostChanged?.Invoke(currentPaid, _currentTotalCost);
 
                         Vector3 center = transform.position;
-                        Vector3 visualTarget = center + Random.insideUnitSphere * 0.5f;
+                        Vector3 visualTarget = center + Random.insideUnitSphere * VisualTargetRadius;
                         visualTarget.y = center.y;
                         
                         money.AnimateToSpend(visualTarget);

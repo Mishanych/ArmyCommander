@@ -83,6 +83,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArmyCommander.Modules.Building.Building
   _spendingZone: {fileID: 9163791057491703243}
   _visualModel: {fileID: 1227819563818242093}
+  _buildCompleteEffectPrefab: {fileID: 7069406228484252099, guid: 650e76b3fc57a5845b78d7e0ed1f2b92, type: 3}
 --- !u!114 &7237336670863219293
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,6 +5,8 @@ namespace ArmyCommander.Modules.Player
 {
     public class BillboardUI : MonoBehaviour
     {
+        private const float CanvasMirrorRotation = 180f;
+        
         private Transform _mainCameraTransform;
 
         private void Start()
@@ -23,6 +25,7 @@ namespace ArmyCommander.Modules.Player
             targetPosition.y = transform.position.y;
 
             transform.LookAt(targetPosition);
+            transform.Rotate(0, CanvasMirrorRotation, 0);
         }
     }
 }

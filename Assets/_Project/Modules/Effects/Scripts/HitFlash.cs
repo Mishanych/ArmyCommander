@@ -6,6 +6,8 @@ namespace ArmyCommander.Modules.Effects
 {
     public class HitFlash : MonoBehaviour
     {
+        private const float FlashEmissionIntensity = 10f;
+        
         [SerializeField] private List<Renderer> _renderers = new List<Renderer>();
         [SerializeField] private float _flashDuration = 0.15f;
     
@@ -34,7 +36,7 @@ namespace ArmyCommander.Modules.Effects
 
                 _propBlock.SetColor(BaseColorId, Color.white);
             
-                _propBlock.SetColor(EmissionColorId, Color.white * 10f); 
+                _propBlock.SetColor(EmissionColorId, Color.white * FlashEmissionIntensity); 
 
                 r.SetPropertyBlock(_propBlock);
             }

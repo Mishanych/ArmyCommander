@@ -6,6 +6,8 @@ namespace ArmyCommander.Modules.Units
 {
     public class UnitCombat : MonoBehaviour
     {
+        private const float RotationSpeed = 10f;
+        
         [SerializeField] private Transform _firePoint;
 
         [Inject] private IUnitManager _unitManager;
@@ -99,7 +101,7 @@ namespace ArmyCommander.Modules.Units
             if (direction != Vector3.zero)
             {
                 Quaternion lookRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * RotationSpeed);
             }
         }
 

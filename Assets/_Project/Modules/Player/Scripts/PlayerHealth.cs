@@ -14,8 +14,8 @@ namespace ArmyCommander.Modules.Player
         [SerializeField] private Slider _healthSlider;
 
         [Header("UI - Shield")]
-        [SerializeField] private Image _shieldIcon; // Твоє нове поле для іконки
-        [SerializeField] private GameObject _shieldRoot; // Кореневий об'єкт іконки (щоб ховати на Lv 0)
+        [SerializeField] private Image _shieldIcon;
+        [SerializeField] private GameObject _shieldRoot;
 
         private float _currentHealth;
         private float _protection = 0f;
@@ -27,10 +27,19 @@ namespace ArmyCommander.Modules.Player
 
         private void Awake()
         {
+            _healthBarRoot.SetActive(false);
+            _shieldRoot.SetActive(false);
+        }
+
+        public void Initialize(float maxHealth)
+        {
+            _maxHealth = maxHealth;
             _currentHealth = _maxHealth;
-            if (_healthBarRoot != null) _healthBarRoot.SetActive(false);
-            
-            if (_shieldRoot != null) _shieldRoot.SetActive(false);
+
+            if (_healthSlider != null)
+                _healthSlider.value = 1f;
+
+            Debug.Log($"[Health] Initialized with {_maxHealth} HP");
         }
 
         public void UpdateShieldStatus(float protectionValue, Sprite icon)

@@ -7,11 +7,13 @@ namespace ArmyCommander.Modules.Common
 {
     public class KillZone : MonoBehaviour
     {
+        private const string PlayerTag = "Player";
+        
         [Inject] private LevelManager _levelManager;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag(PlayerTag))
             {
                 Debug.Log("Player fell off the map!");
                 _levelManager.FinishLevel(false);

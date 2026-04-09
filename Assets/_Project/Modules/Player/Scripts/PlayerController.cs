@@ -1,19 +1,19 @@
 ﻿using System;
 using ArmyCommander.Core;
+using ArmyCommander.Input;
 using ArmyCommander.Modules.Animations;
 using ArmyCommander.Modules.Level;
 using ArmyCommander.Modules.Units;
 using ArmyCommander.Modules.Units.Scripts;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 namespace ArmyCommander.Modules.Player
 {
     public class PlayerController : MonoBehaviour, IAttacker, IDamageable
     {
-        [FormerlySerializedAs("_health")] [SerializeField] private PlayerHealth _playerHealth;
+        [SerializeField] private PlayerHealth _playerHealth;
         [SerializeField] private GameObject _stack;
         [SerializeField] private Rigidbody _rigidbody;
         
@@ -25,6 +25,7 @@ namespace ArmyCommander.Modules.Player
         [Inject] private IUnitManager _unitManager;
         [Inject] private LevelManager _levelManager;
         [Inject] private PlayerProvider _playerProvider;
+        [Inject] private IInputService _inputService;
 
         public bool IsDead => _playerHealth != null && _playerHealth.IsDead;
         public float Health => _playerHealth != null ? _playerHealth.CurrentHealth : 0f;
@@ -45,6 +46,7 @@ namespace ArmyCommander.Modules.Player
 
         private void Start()
         {
+            _playerHealth.Initialize(_config.MaxHealth);
             _combat.Initialize(this);
             _combat.enabled = true;
             
@@ -70,9 +72,7 @@ namespace ArmyCommander.Modules.Player
 
         private async UniTaskVoid Die()
         {
-            _rigidbody.linearVelocity = Vector3.zero;
-            _rigidbody.angularVelocity = Vector3.zero;
-            _rigidbody.isKinematic = true;
+            DisableMovement();
             
             _stack.SetActive(false);
             _characterAnimation.PlayDie();
@@ -107,6 +107,15 @@ namespace ArmyCommander.Modules.Player
         public void StopAttackAnimation()
         {
             _characterAnimation.SetShooting(false);
+        }
+        
+        private void DisableMovement()
+        {
+            _inputService.Enable(false);
+
+            _rigidbody.linearVelocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+            _rigidbody.isKinematic = true;
         }
     }
 }

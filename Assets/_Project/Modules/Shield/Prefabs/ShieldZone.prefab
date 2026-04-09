@@ -250,6 +250,7 @@ MonoBehaviour:
   _zone: {fileID: 2803821974786621720}
   _config: {fileID: 11400000, guid: ba60fc734832e5d43ab688b4217117e0, type: 2}
   _zoneUI: {fileID: 1585299437807117427}
+  _shieldUpgradeEffectPrefab: {fileID: 4997651932108611361, guid: 1561b17670dd19740a4ae84b6028b1e0, type: 3}
 --- !u!114 &1585299437807117427
 MonoBehaviour:
   m_ObjectHideFlags: 0

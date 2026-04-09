@@ -12,6 +12,13 @@ namespace ArmyCommander.Modules.Level
 {
     public class LevelManager : MonoBehaviour
     {
+        private const float PlayerSpawnRadius = 2f;
+        private const float FullCircleRadians = Mathf.PI * 2f;
+        private const float NavMeshSampleDistance = 1f;
+
+        private const float LootSpawnRadius = 5f;
+        private const int InitialLootCount = 10;
+        
         [SerializeField] private UnitConfig _playerUnitConfig;
         [SerializeField] private Transform _playerSpawnPoint;
         [SerializeField] private Transform _initialRallyPoint;
@@ -66,14 +73,16 @@ namespace ArmyCommander.Modules.Level
 
         private void SpawnInitialPlayerSquad()
         {
-            float spawnRadius = 2f;
-
             for (int i = 0; i < _startingUnitsCount; i++)
             {
-                float angle = i * Mathf.PI * 2f / _startingUnitsCount;
-                Vector3 newPos = _playerSpawnPoint.position + new Vector3(Mathf.Cos(angle) * spawnRadius, 0, Mathf.Sin(angle) * spawnRadius);
+                float angle = i * FullCircleRadians / _startingUnitsCount;
+        
+                Vector3 newPos = _playerSpawnPoint.position + new Vector3(
+                    Mathf.Cos(angle) * PlayerSpawnRadius, 
+                    0, 
+                    Mathf.Sin(angle) * PlayerSpawnRadius);
 
-                if (NavMesh.SamplePosition(newPos, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(newPos, out NavMeshHit hit, NavMeshSampleDistance, NavMesh.AllAreas))
                 {
                     var unit = _unitFactory.Create(_playerUnitConfig, hit.position);
                     _unitManager.RegisterUnit(unit, FactionType.Player);
@@ -83,11 +92,9 @@ namespace ArmyCommander.Modules.Level
 
         private void SpawnStartingLoot()
         {
-            float lootRadius = 5f;
-
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < InitialLootCount; i++)
             {
-                Vector2 randomPoint = Random.insideUnitCircle * lootRadius;
+                Vector2 randomPoint = Random.insideUnitCircle * LootSpawnRadius;
                 Vector3 pos = _playerSpawnPoint.position + new Vector3(randomPoint.x, 0, randomPoint.y);
 
                 _moneySpawner.Spawn(pos, CurrencyType.Silver);
